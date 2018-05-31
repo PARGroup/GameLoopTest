@@ -1,10 +1,6 @@
 package controller;
 
-import event.AnimationEvent;
-import event.GameEvent;
-import event.handler.AnimationEventHandler;
-import event.handler.GameEventHandler;
-import event.handler.GeneralEventHandler;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Rawad Aboudlal
@@ -12,29 +8,57 @@ import event.handler.GeneralEventHandler;
  */
 public class GameController {
 
-  private GeneralEventHandler eventHandler = new GeneralEventHandler();
+  private static long prevTime;
+  private static long accumulatedTime;
 
-  private GameEventHandler gameEventHandler = new GameEventHandler();
-  private AnimationEventHandler animationEventHandler = new AnimationEventHandler();
+  private static long tickRate = TimeUnit.MILLISECONDS.toNanos(30);
 
-  public void initialize() {
+  private static boolean running;
 
-    eventHandler.addEventHandler(GameEvent.class, gameEventHandler);
-    eventHandler.addEventHandler(AnimationEvent.class, animationEventHandler);
+  public static void startGame() {
 
-    gameEventHandler.start();
-    animationEventHandler.start();
+    running = true;
 
-    eventHandler.start(false);
+    Thread gameThread = new Thread(new Runnable() {
+
+      /**
+       * @see java.lang.Runnable#run()
+       */
+      @Override
+      public void run() {
+
+        accumulatedTime = 0;
+        prevTime = System.nanoTime();
+
+        while (running) {
+
+          long currentTime = System.nanoTime();
+          long deltaTime = currentTime - prevTime;
+          prevTime = currentTime;
+
+          accumulatedTime += deltaTime;
+
+          while (accumulatedTime >= tickRate) {
+            accumulatedTime -= tickRate;
+            GameController.tick();
+          }
+
+        }
+
+      }
+
+    }, "Game Thread");
+
+    gameThread.start();
 
   }
 
-  /**
-   * 
-   * @return The event handler which processes all incoming events.
-   */
-  public GeneralEventHandler getEventHandler() {
-    return eventHandler;
+  private static void tick() {
+
+  }
+
+  public static void stopGame() {
+    running = false;
   }
 
 }
