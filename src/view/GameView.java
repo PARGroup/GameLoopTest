@@ -11,7 +11,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -69,7 +68,6 @@ public class GameView {
       for (int col = 0; col < 7; col++) {
         Rectangle placeHolder = new Rectangle();
         placeHolder.setOpacity(0);
-        placeHolder.setFill(Color.RED);
         placeHolder.setWidth(64);
         placeHolder.setHeight(64);
         UIController.addChipSpot(placeHolder, col);
@@ -119,7 +117,8 @@ public class GameView {
       }
     }
 
-    throw new IllegalStateException("The GridPane should not have any empty cells.");
+    throw new IllegalStateException(
+        "The GridPane should not have any empty cells. row, col: " + row + ", " + column);
 
   }
 

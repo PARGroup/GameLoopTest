@@ -101,9 +101,15 @@ public class GameController {
 
     int row = 0;
 
-    for (; row < chips.length && chips[row][column] != null; row++);
+    for (; row < chips.length && chips[row][column] == null; row++);
 
-    chips[row - 1][column] = chip;
+    if (row <= 0) {
+      return;
+    }
+
+    row--;
+
+    chips[row][column] = chip;
     UIController.chipPlaced(chip, column, row);
 
   }

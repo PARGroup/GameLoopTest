@@ -78,7 +78,7 @@ public class UIController {
        */
       @Override
       public void run() {
-        GameController.setPaused(true);
+        // GameController.setPaused(true);
         GameView.placeChip(chipView, column, row);
       }
     });
