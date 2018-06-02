@@ -7,11 +7,11 @@ import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.stage.WindowEvent;
+import model.Chip;
 import view.GameView;
 
 /**
@@ -66,11 +66,11 @@ public class UIController {
 
   }
 
-  public static void chipPlace(int column) {
+  public static void chipPlaced(Chip chip, int column, int row) {
 
-    Circle chip = new Circle(32, Color.BLUE);
+    Circle chipView = new Circle(32, chip.getColor());
 
-    addChipSpot(chip, column);
+    addChipSpot(chipView, column);
 
     Platform.runLater(new Runnable() {
       /**
@@ -78,7 +78,8 @@ public class UIController {
        */
       @Override
       public void run() {
-        GameView.placeChip(chip, column);
+        GameController.setPaused(true);
+        GameView.placeChip(chipView, column, row);
       }
     });
 

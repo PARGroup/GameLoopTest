@@ -3,7 +3,6 @@ package view;
 import controller.UIController;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -23,11 +22,12 @@ import javafx.stage.Stage;
  */
 public class GameView {
 
+  private static StackPane root;
   private static GridPane grid;
 
   public static void createView(Stage stage) {
 
-    Parent root = createRoot();
+    root = createRoot();
 
     Scene scene = new Scene(root);
 
@@ -42,7 +42,7 @@ public class GameView {
 
   }
 
-  private static Parent createRoot() {
+  private static StackPane createRoot() {
 
     StackPane root = new StackPane();
 
@@ -95,10 +95,10 @@ public class GameView {
 
   }
 
-  public static void placeChip(Circle chip, int column) {
+  public static void placeChip(Circle chip, int column, int row) {
 
-    grid.getChildren().remove(getNodeByColumnRowIndex(column, 0));
-    grid.add(chip, column, 0);
+    grid.getChildren().remove(getNodeByColumnRowIndex(column, row));
+    grid.add(chip, column, row);
 
   }
 

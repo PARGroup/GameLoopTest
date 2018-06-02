@@ -6,6 +6,9 @@ import java.util.concurrent.TimeUnit;
 import event.ChipPlaceEvent;
 import event.Event;
 import event.StopEvent;
+import javafx.scene.paint.Color;
+import model.Board;
+import model.Chip;
 
 /**
  * @author Rawad Aboudlal
@@ -21,10 +24,16 @@ public class GameController {
   private static long tickRate = TimeUnit.MILLISECONDS.toNanos(30);
 
   private static boolean running;
+  private static boolean paused;
+
+  private static Board board;
 
   public static void startGame() {
 
     running = true;
+
+    board = new Board();
+    board.setChips(new Chip[6][7]);
 
     Thread gameThread = new Thread(new Runnable() {
 
@@ -62,7 +71,7 @@ public class GameController {
 
   private synchronized static void tick() {
 
-    while (!EVENTS.isEmpty()) {
+    while (!paused && !EVENTS.isEmpty()) {
       Event e = EVENTS.poll();
       processEvent(e);
     }
@@ -72,11 +81,30 @@ public class GameController {
   private static void processEvent(Event e) {
 
     if (e instanceof ChipPlaceEvent) {
+
       ChipPlaceEvent chipPlaceEvent = (ChipPlaceEvent) e;
-      UIController.chipPlace(chipPlaceEvent.getColumn());
+
+      Chip chip = new Chip();
+      chip.setColor(Color.BLUE);
+
+      placeChip(chip, chipPlaceEvent.getColumn());
+
     } else if (e instanceof StopEvent) {
       stopGame();
     }
+
+  }
+
+  private static void placeChip(Chip chip, int column) {
+
+    Chip[][] chips = board.getChips();
+
+    int row = 0;
+
+    for (; row < chips.length && chips[row][column] != null; row++);
+
+    chips[row - 1][column] = chip;
+    UIController.chipPlaced(chip, column, row);
 
   }
 
@@ -87,6 +115,13 @@ public class GameController {
   private static void stopGame() {
     running = false;
     UIController.terminate();
+  }
+
+  /**
+   * @param paused the paused to set
+   */
+  public static void setPaused(boolean paused) {
+    GameController.paused = paused;
   }
 
 }
