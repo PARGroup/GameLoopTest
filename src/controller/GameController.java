@@ -27,6 +27,9 @@ public class GameController {
   private static boolean paused;
 
   private static Board board;
+  
+
+  private static boolean turn = true; //dont judge
 
   public static void startGame() {
 
@@ -85,7 +88,13 @@ public class GameController {
       ChipPlaceEvent chipPlaceEvent = (ChipPlaceEvent) e;
 
       Chip chip = new Chip();
-      chip.setColor(Color.BLUE);
+      if (turn) {
+    	  chip.setColor(Color.BLUE);
+      	  turn = false;
+      } else {
+    	  chip.setColor(Color.RED);
+    	  turn = true;
+      }
 
       placeChip(chip, chipPlaceEvent.getColumn());
 

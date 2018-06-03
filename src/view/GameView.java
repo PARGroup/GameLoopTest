@@ -23,12 +23,14 @@ public class GameView {
   private static Pane chipsHolder;
   private static ImageView boardView;
 
+  private static final String BOARD = "board-trans-yellow.png";
+  
   public static void createView(Stage stage) {
 
     root = createRoot();
 
     Scene scene = new Scene(root);
-
+    
     UIController.addStage(stage);
 
     stage.setScene(scene);
@@ -45,7 +47,7 @@ public class GameView {
     StackPane root = new StackPane();
 
     boardView =
-        new ImageView(new Image(GameView.class.getClassLoader().getResourceAsStream("board.png")));
+        new ImageView(new Image(GameView.class.getClassLoader().getResourceAsStream(BOARD)));
 
     chipsHolder = new Pane();
     UIController.addChipsHolder(chipsHolder);
