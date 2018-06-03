@@ -72,7 +72,7 @@ public class UIController {
 
   }
 
-  public static void addChipsHolder(Pane chipsHolder) {
+  public static void addClickPane(Pane clickPane) {
 
     EventHandler<MouseEvent> clickHandler = new EventHandler<MouseEvent>() {
 
@@ -84,7 +84,8 @@ public class UIController {
 
         int x = (int) event.getX();
 
-        int column = x / (viewConfig.getChipRadius() * 2 + viewConfig.getHgap());
+        int column = (x - (viewConfig.getHgap() / 2))
+            / ((viewConfig.getChipRadius() * 2) + viewConfig.getHgap());
 
         GameController.addEvent(new ChipPlaceEvent(column));
 
@@ -92,8 +93,8 @@ public class UIController {
 
     };
 
-    MOUSE_EVENT_HANDLERS.put(chipsHolder, clickHandler);
-    chipsHolder.addEventHandler(MouseEvent.MOUSE_CLICKED, clickHandler);
+    MOUSE_EVENT_HANDLERS.put(clickPane, clickHandler);
+    clickPane.addEventHandler(MouseEvent.MOUSE_CLICKED, clickHandler);
 
   }
 

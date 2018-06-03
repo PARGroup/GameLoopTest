@@ -24,13 +24,13 @@ public class GameView {
   private static ImageView boardView;
 
   private static final String BOARD = "board-trans-yellow.png";
-  
+
   public static void createView(Stage stage) {
 
     root = createRoot();
 
     Scene scene = new Scene(root);
-    
+
     UIController.addStage(stage);
 
     stage.setScene(scene);
@@ -46,20 +46,25 @@ public class GameView {
 
     StackPane root = new StackPane();
 
-    boardView =
-        new ImageView(new Image(GameView.class.getClassLoader().getResourceAsStream(BOARD)));
+    Image boardImage = new Image(GameView.class.getClassLoader().getResourceAsStream(BOARD));
+
+    boardView = new ImageView(boardImage);
 
     chipsHolder = new Pane();
-    UIController.addChipsHolder(chipsHolder);
 
-    chipsHolder.translateXProperty().bind(boardView.layoutXProperty());
-    chipsHolder.translateYProperty().bind(boardView.layoutYProperty());
+    chipsHolder.maxWidthProperty().bind(boardImage.widthProperty());
+    chipsHolder.maxHeightProperty().bind(boardImage.heightProperty());
 
-    chipsHolder.prefWidthProperty().bind(boardView.fitWidthProperty());
-    chipsHolder.prefHeightProperty().bind(boardView.fitHeightProperty());
+    Pane clickPane = new Pane();
 
-    root.getChildren().add(boardView);
+    clickPane.maxWidthProperty().bind(boardImage.widthProperty());
+    clickPane.maxHeightProperty().bind(boardImage.heightProperty());
+
+    UIController.addClickPane(clickPane);
+
     root.getChildren().add(chipsHolder);
+    root.getChildren().add(boardView);
+    root.getChildren().add(clickPane);
 
     return root;
 
