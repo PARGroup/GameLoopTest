@@ -1,20 +1,17 @@
 package view;
 
 import controller.UIController;
-import javafx.geometry.Insets;
-import javafx.scene.Node;
+import javafx.animation.TranslateTransition;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /**
  * @author Rawad Aboudlal
@@ -23,7 +20,8 @@ import javafx.stage.Stage;
 public class GameView {
 
   private static StackPane root;
-  private static Canvas chipsHolder;
+  private static Pane chipsHolder;
+  private static ImageView boardView;
 
   public static void createView(Stage stage) {
 
@@ -46,16 +44,17 @@ public class GameView {
 
     StackPane root = new StackPane();
 
-    ImageView boardView =
+    boardView =
         new ImageView(new Image(GameView.class.getClassLoader().getResourceAsStream("board.png")));
 
-    chipsHolder = new Canvas();
+    chipsHolder = new Pane();
+    UIController.addChipsHolder(chipsHolder);
 
     chipsHolder.translateXProperty().bind(boardView.layoutXProperty());
     chipsHolder.translateYProperty().bind(boardView.layoutYProperty());
 
-    chipsHolder.widthProperty().bind(boardView.fitWidthProperty());
-    chipsHolder.heightProperty().bind(boardView.fitHeightProperty());
+    chipsHolder.prefWidthProperty().bind(boardView.fitWidthProperty());
+    chipsHolder.prefHeightProperty().bind(boardView.fitHeightProperty());
 
     root.getChildren().add(boardView);
     root.getChildren().add(chipsHolder);
@@ -64,8 +63,35 @@ public class GameView {
 
   }
 
-  public static void placeChip(Circle chip, int column, int row) {
+  public static void placeChip(Circle chip, int x, int startY, int endY) {
 
+    TranslateTransition translation = new TranslateTransition(Duration.millis(100), chip);
+    translation.setFromX(x);
+    translation.setFromY(startY);
+    translation.setToX(x);
+    translation.setToY(endY);
+
+    translation.setOnFinished(new EventHandler<ActionEvent>() {
+      /**
+       * @see javafx.event.EventHandler#handle(javafx.event.Event)
+       */
+      @Override
+      public void handle(ActionEvent event) {
+        UIController.onAnimationFinished();
+      }
+    });
+
+    chipsHolder.getChildren().add(chip);
+    translation.playFromStart();
+
+  }
+
+  public static int getBoardWidth() {
+    return (int) boardView.getFitWidth();
+  }
+
+  public static int getBoardHeight() {
+    return (int) boardView.getFitHeight();
   }
 
 }

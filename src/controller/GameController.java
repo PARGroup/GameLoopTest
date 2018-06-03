@@ -33,7 +33,7 @@ public class GameController {
     running = true;
 
     board = new Board();
-    board.setChips(new Chip[6][7]);
+    board.setChips(new Chip[Board.ROWS][Board.COLUMNS]);
 
     Thread gameThread = new Thread(new Runnable() {
 

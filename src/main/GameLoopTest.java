@@ -1,6 +1,7 @@
 package main;
 
 import controller.GameController;
+import controller.UIController;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import view.GameView;
@@ -26,6 +27,7 @@ public class GameLoopTest extends Application {
   @Override
   public void start(Stage primaryStage) throws Exception {
 
+    UIController.initialize();
     GameController.startGame();
     GameView.createView(primaryStage);
 
