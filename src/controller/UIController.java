@@ -103,7 +103,7 @@ public class UIController {
     Circle chipView = new Circle(viewConfig.getChipRadius(), chip.getColor());
 
     final int x = column * (viewConfig.getChipRadius() * 2 + viewConfig.getHgap())
-        + viewConfig.getChipRadius() + viewConfig.getHgap();
+        + viewConfig.getChipRadius() + (viewConfig.getHgap() / 2);
     // vgap * 2 causes a little bounce effect for the top-most chip only.
     final int y = viewConfig.getVgap() * 2 + viewConfig.getChipRadius();
     final int endY = row * (viewConfig.getChipRadius() * 2 + viewConfig.getVgap())
